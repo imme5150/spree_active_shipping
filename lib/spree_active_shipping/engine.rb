@@ -8,6 +8,10 @@ module SpreeActiveShippingExtension
     end
 
     def self.activate
+      # Make sure the Calculator::ActiveShipping module is required first.  If not, this causes problems
+      # in 1.9.3 in production on Heroku.
+      require 'spree/calculator/active_shipping/base'
+
       Dir.glob(File.join(File.dirname(__FILE__), "../../app/models/spree/calculator/**/base.rb")) do |c|
         Rails.env.production? ? require(c) : load(c)
       end
